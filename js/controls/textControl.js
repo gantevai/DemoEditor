@@ -1,0 +1,1 @@
+class TextControl extends Control {}

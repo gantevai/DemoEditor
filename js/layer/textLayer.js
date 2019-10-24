@@ -1,0 +1,3 @@
+class TextLayer extends Layer {
+    
+}

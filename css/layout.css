@@ -1,0 +1,134 @@
+body {
+  background-color: black;
+}
+.main-container {
+  width: 100%;
+}
+
+.aligned-wrapper {
+  width: 100%;
+  padding: 0 5px;
+  min-width: 1200px;
+  box-sizing: border-box;
+}
+
+.tools-container {
+  width: 2%;
+  background-color: black;
+  height: 99vh;
+  float: left;
+  margin-right: 10px;
+}
+
+.editing-container {
+  width: 86%;
+  background-color: rgba(10, 10, 10, 0.966);
+  height: 99vh;
+  float: left;
+}
+
+.filter-container {
+  background-color: black;
+  width: 100%;
+}
+
+.clear-fix:before,
+.clear-fix:after {
+  content: '';
+  display: table;
+}
+.clear-fix:after {
+  clear: both;
+}
+
+#image_control {
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  border: 1px solid black;
+  background-color: lightgray;
+  z-index: 999999;
+}
+#image_control button {
+  border: none;
+  outline: none;
+}
+
+#image_control button img {
+  width: 20px;
+  height: 20px;
+  padding: 7px 7px;
+  border: 1px solid darkgray;
+}
+
+#image_control a {
+  width: 60px;
+  float: left;
+  padding: 0 6px;
+  text-align: center;
+}
+
+#image_control a img {
+  width: 55px;
+  height: 55px;
+  margin: 0 auto;
+  border: 1px solid black;
+  float: left;
+}
+
+#image-layers {
+  width: 144px;
+  background-color: lightgray;
+  border: 1px solid black;
+}
+
+.all-layers {
+  width: 144px;
+  background-color: lightgray;
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+}
+
+.up-down-btns {
+  width: 30px;
+  float: left;
+  height: 35px;
+}
+
+.up-down-btns .up-btn,
+.up-down-btns .down-btn {
+  float: left;
+  height: 15px;
+  width: 100%;
+}
+.up-down-btns .up-btn img,
+.up-down-btns .down-btn img {
+  width: 100%;
+  height: 15px;
+}
+
+.layer {
+  float: left;
+}
+
+.layer-thumbnails {
+  width: 35px;
+  float: left;
+  height: 35px;
+}
+.layer-thumbnails img {
+  width: 100%;
+  height: 35px;
+}
+
+.layer-info {
+  float: left;
+  width: 62px;
+  height: 35px;
+}
+
+.all-layers-body {
+  height: 100px;
+  overflow: scroll;
+}
