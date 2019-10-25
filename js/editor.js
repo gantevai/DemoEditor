@@ -39,15 +39,23 @@ class Editor {
     if (layerContext instanceof ImageLayer) {
       this.control = new ImageControl(layerContext);
     } else {
-      this.control = new this.showTextControl(layerContext)
+      this.control = new this.showTextControl(layerContext);
     }
   }
 
-  displayLayers(){
-    
+  drawAllLayers() {
+    for (let i = 0; i < this.layers.length; i++) {
+      let dimensions = this.layers[i].canvas.getCanvasSize();
+      let x = dimensions.positionX;
+      let y = dimensions.positionY;
+      let width = dimensions.width;
+      let height = dimensions.height;
+      let imageData = this.layers[i].canvas.context.getImageData(0, 0, width, height);
+      this.canvas.context.putImageData(imageData, x, y);
+    }
   }
 
-
+  displayLayers() {}
 
   // showImageControl(context) {
   //   let IMAGE_CONTROL = new ImageControl();

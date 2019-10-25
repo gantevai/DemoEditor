@@ -4,6 +4,7 @@ class Main {
   editor;
   uploadBtn = document.getElementById('uploadBtn');
   fileInputBtn = document.getElementById('fileInputBtn');
+  saveBtn = document.getElementById('saveBtn');
   constructor() {
     this.init();
   }
@@ -16,6 +17,20 @@ class Main {
     this.fileInputBtn.onchange = e => {
       this.upload(e);
     };
+    this.saveBtn.onclick = e => {
+      e.preventDefault();
+      this.save();
+      this.editor.canvas.clearCanvas();
+    };
+
+    // this.saveBtn.onclick = () => {
+    //   image = canvas.toDataURL('image/png', 1.0).replace('image/png', 'image/octet-stream');
+
+    //   var link = document.createElement('a');
+    //   link.download = 'my-image.png';
+    //   link.href = image;
+    //   link.click();
+    // };
   }
 
   upload(input) {
@@ -32,6 +47,17 @@ class Main {
       };
       reader.readAsDataURL(input.target.files[0]);
     }
+  }
+
+  save() {
+    this.editor.drawAllLayers();
+    var image = this.editor.canvas.element
+      .toDataURL('image/png', 1.0)
+      .replace('image/png', 'image/octet-stream');
+    var link = document.createElement('a');
+    link.download = 'my-image.png';
+    link.href = image;
+    link.click();
   }
 }
 

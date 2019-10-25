@@ -40,6 +40,7 @@ class Layer {
     if (!this.isTransforming) {
       this.transformImage();
     }
+    this.canvas.resizeImage();
   }
   /**
    *
@@ -52,7 +53,6 @@ class Layer {
     IMAGE.src = this.canvas.getOldImage().src;
 
     IMAGE.onload = function(e) {
-      e.preventDefault();
       if (rotate) {
         var tempWidth = IMAGE.width;
         var tempHeight = IMAGE.height;

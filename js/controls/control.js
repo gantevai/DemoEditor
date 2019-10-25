@@ -18,7 +18,7 @@ class Control {
       this.layer.rotateLeft();
     };
     this.createButton('rotate-right').onclick = () => {
-      this.layer.rotateLeft();
+      this.layer.rotateRight();
     };
     this.createButton('flip').onclick = () => {
       this.layer.flip();

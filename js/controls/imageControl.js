@@ -16,6 +16,7 @@ class ImageControl extends Control {
     this.controlBox.style.width = `${this.controlWidth}px`;
     this.createSpecificControls();
     this.createFilterControls();
+    this.createSliderBars();
   }
 
   createSpecificControls() {
@@ -25,10 +26,12 @@ class ImageControl extends Control {
   }
 
   createFilterControls() {
+    //for heading of filter section
     const filterHeading = document.createElement('div');
     filterHeading.innerText = 'Filters';
     filterHeading.classList.add('heading-span');
     this.controlBox.appendChild(filterHeading);
+
     let imageData;
     this.createFilteredThumbnail(CONSTANTS.FILTER_TYPE.ORIGINAL).onclick = () => {
       imageData = this.filter.getFilteredImageData(CONSTANTS.FILTER_TYPE.ORIGINAL);
@@ -56,8 +59,80 @@ class ImageControl extends Control {
     };
   }
 
+  createSliderBars() {
+    // 'for heading of sliderbar section'
+    const sliderHeading = document.createElement('div');
+    sliderHeading.innerText = 'Manipulators';
+    sliderHeading.classList.add('heading-span');
+    sliderHeading.classList.add('manipulators');
+    this.controlBox.appendChild(sliderHeading);
+
+    let imageData;
+
+    this.brightnessSlider = this.createSlider(
+      CONSTANTS.BRIGHTNESS.SLIDER_NAME,
+      CONSTANTS.BRIGHTNESS.MIN_VALUE,
+      CONSTANTS.BRIGHTNESS.MAX_VALUE,
+      CONSTANTS.BRIGHTNESS.INITIAL_VALUE
+    );
+    this.brightnessSlider.oninput = () => {
+      imageData = this.filter.getManipulatedImageData(
+        this.brightnessSlider.value,
+        CONSTANTS.BRIGHTNESS.SLIDER_NAME
+      );
+      this.layer.filter(imageData);
+    };
+
+    this.contrastSlider = this.createSlider(
+      CONSTANTS.CONTRAST.SLIDER_NAME,
+      CONSTANTS.CONTRAST.MIN_VALUE,
+      CONSTANTS.CONTRAST.MAX_VALUE,
+      CONSTANTS.CONTRAST.INITIAL_VALUE
+    );
+    this.contrastSlider.oninput = () => {
+      imageData = this.filter.getManipulatedImageData(
+        this.contrastSlider.value,
+        CONSTANTS.CONTRAST.SLIDER_NAME
+      );
+      this.layer.filter(imageData);
+    };
+
+    this.saturationSlider = this.createSlider(
+      CONSTANTS.SATURATION.SLIDER_NAME,
+      CONSTANTS.SATURATION.MIN_VALUE,
+      CONSTANTS.SATURATION.MAX_VALUE,
+      CONSTANTS.SATURATION.INITIAL_VALUE
+    );
+    this.saturationSlider.oninput = () => {
+      imageData = this.filter.getManipulatedImageData(
+        this.saturationSlider.value,
+        CONSTANTS.SATURATION.SLIDER_NAME
+      );
+      this.layer.filter(imageData);
+    };
+  }
+
+  createSlider(heading, min, max, initialValue) {
+    const sliderDiv = document.createElement('div');
+    sliderDiv.style.textAlign = 'center';
+    sliderDiv.style.cssFloat = 'left';
+    const sliderName = document.createElement('h4');
+    sliderName.innerText = heading;
+    sliderName.classList.add('slider-name');
+    sliderDiv.appendChild(sliderName);
+    const slider = document.createElement('input');
+    slider.setAttribute('type', 'range');
+    slider.setAttribute('min', min);
+    slider.setAttribute('max', max);
+    slider.setAttribute('value', initialValue);
+    slider.classList.add('sliders');
+    sliderDiv.appendChild(slider);
+    this.controlBox.appendChild(sliderDiv);
+    return slider;
+  }
+
   createFilteredThumbnail(filterType) {
-    const image = this.filter.getImage(filterType);
+    const image = this.filter.getImage(filterType, true);
     const anchor = document.createElement('a');
     const span = document.createElement('span');
     span.style.fontWeight = 'bold';

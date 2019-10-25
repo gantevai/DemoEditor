@@ -12,8 +12,8 @@
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: gray;
-  border: 3px solid white;
+  background: black;
+  border: 3px solid darkgray;
   position: absolute;
   z-index: 99999;
 }

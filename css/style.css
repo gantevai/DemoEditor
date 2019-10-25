@@ -31,8 +31,21 @@ li img {
   font-weight: bold;
   text-align: center;
   margin-bottom: 5px;
-  border-bottom: 1px solid black;
-  border-top: 1px solid black;
+  float: left;
+  width: 100%;
+}
+
+.manipulators {
+  border-top: 1px solid darkgray;
+  padding-top: 5px;
+}
+
+.sliders {
+  margin: 0 7px;
+}
+
+.slider-name {
+  font-size: 11px;
 }
 
 .layer-info span {
