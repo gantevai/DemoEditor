@@ -2,8 +2,10 @@ import CONSTANTS from './Constants.js';
 
 class CanvasElement {
   constructor(container, isCrop) {
+    this.container = container;
+    this.isCrop = isCrop;
     this.init();
-    this.createElement(container, isCrop);
+    this.createElement(isCrop);
     // this.element.addEventListener('click', () => {
     //   this.showresizable();
     // });
@@ -30,8 +32,7 @@ class CanvasElement {
     this.context = null; // variable for canvas context
   }
 
-  createElement(container, isCrop) {
-    this.container = document.getElementById(container);
+  createElement(isCrop) {
     this.createResizableDiv();
     this.createResizers();
     this.createCanvas(isCrop);
@@ -80,7 +81,7 @@ class CanvasElement {
     if (!isCrop) {
       this.setCanvasSize();
     } else {
-      this.setCanvasSize(200, 200);
+      this.setCanvasSize(100, 100);
     }
     this.resizable.appendChild(this.element);
     this.context = this.element.getContext('2d');
@@ -96,7 +97,7 @@ class CanvasElement {
   getCanvasSize() {
     return {
       positionX: this.resizable.offsetLeft - this.container.offsetLeft,
-      positionY: this.resizable.offsetTop,
+      positionY: this.resizable.offsetTop - this.container.offsetTop,
       width: this.element.width,
       height: this.element.height
     };
@@ -165,13 +166,41 @@ class CanvasElement {
       const newBoxPositionX = e.pageX - mousePointDistFromBoxPositionX;
       const newBoxPositionY = e.pageY - mousePointDistFromBoxPositionY;
 
-      if (
-        newBoxPositionX >= this.container.offsetLeft &&
-        newBoxPositionX + this.element.offsetWidth <=
-          this.container.offsetLeft + this.container.offsetWidth
-      ) {
-        this.resizable.style.left = newBoxPositionX + 'px';
-        this.element.style.left = 0;
+      if (this.isCrop) {
+        if (
+          newBoxPositionX >= this.container.offsetLeft &&
+          newBoxPositionX + this.element.offsetWidth <=
+            this.container.offsetLeft + this.container.offsetWidth
+        ) {
+          this.resizable.style.left = newBoxPositionX - this.container.offsetLeft + 'px';
+          this.element.style.left = 0;
+        }
+
+        if (
+          newBoxPositionY >= this.container.offsetTop &&
+          newBoxPositionY + this.element.offsetHeight <=
+            this.container.offsetTop + this.container.offsetHeight
+        ) {
+          this.resizable.style.top = newBoxPositionY - this.container.offsetTop + 'px';
+          this.element.style.top = 0;
+        }
+      } else {
+        if (
+          newBoxPositionX >= this.container.offsetLeft &&
+          newBoxPositionX + this.element.offsetWidth <=
+            this.container.offsetLeft + this.container.offsetWidth
+        ) {
+          this.resizable.style.left = newBoxPositionX + 'px';
+          this.element.style.left = 0;
+        }
+        if (
+          newBoxPositionY >= this.container.offsetTop &&
+          newBoxPositionY + this.element.offsetHeight <=
+            this.container.offsetTop + this.container.offsetHeight
+        ) {
+          this.resizable.style.top = newBoxPositionY + 'px';
+          this.element.style.top = 0;
+        }
       }
 
       if (
@@ -333,7 +362,7 @@ class CanvasElement {
   }
 
   destroy() {
-    this.container.removeChild(this.resizable);
+    this.resizable.remove();
   }
 }
 

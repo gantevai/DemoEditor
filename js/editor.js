@@ -1,16 +1,21 @@
 import CanvasElement from './CanvasElement.js';
 import ImageLayer from './layer/imageLayer.js';
+import TextLayer from './layer/textLayer.js';
 import ImageControl from './controls/imageControl.js';
+import TextControl from './controls/textControl.js';
+import LayerContainer from './LayerContainer.js';
+
 class Editor {
   layers;
   constructor(container) {
-    this.container = container;
-    this.init();
+    this.init(container);
   }
 
-  init() {
+  init(container) {
     this.layers = [];
+    this.container = document.getElementById(container);
     this.canvas = new CanvasElement(this.container);
+    this.layerContainer = new LayerContainer();
   }
 
   addImage(image) {
@@ -18,18 +23,29 @@ class Editor {
     IMAGE_LAYER.fillImage(image);
     IMAGE_LAYER.changeZindex(this.layers.length);
     this.layers.push(IMAGE_LAYER);
-    IMAGE_LAYER.bindClick(this.layerClicked.bind(this), this.layers.indexOf(IMAGE_LAYER));
+    this.layerContainer.displayLayers(this.layers);
+    IMAGE_LAYER.bindClick(this.layerClicked.bind(this));
+  }
+
+  addText() {
+    const TEXT_LAYER = new TextLayer(this.container);
+    TEXT_LAYER.editFont();
+    TEXT_LAYER.putText();
+    this.layers.push(TEXT_LAYER);
+    this.layerContainer.displayLayers(this.layers);
+    TEXT_LAYER.bindClick(this.layerClicked.bind(this));
   }
 
   /**
    * @summary : this function gets called when a layer canvas is clicked.
    * @param {*} index: index of the layer clicked; used to change z index; hide resizable of other layers;
    * to identify the layer clicked is either text or image
-   * @param {*} ayerContext : the context of the clicked layer (i.e. image layer or text layer)
+   * @param {*} layerContext : the context of the clicked layer (i.e. image layer or text layer)
    * @memberof Editor
    */
-  layerClicked(index, layerContext) {
-    this.layers[index].changeZindex(this.layers.length);
+  layerClicked(layerContext) {
+    const index = this.layers.indexOf(layerContext);
+    layerContext.changeZindex(this.layers.length);
     this.layers.forEach((layer, i) => {
       if (i != index) {
         layer.hideResizeable();
@@ -39,7 +55,7 @@ class Editor {
     if (layerContext instanceof ImageLayer) {
       this.control = new ImageControl(layerContext);
     } else {
-      this.control = new this.showTextControl(layerContext);
+      this.control = new TextControl(layerContext, layerContext.fontStyle);
     }
   }
 
@@ -50,30 +66,12 @@ class Editor {
       let y = dimensions.positionY;
       let width = dimensions.width;
       let height = dimensions.height;
-      let imageData = this.layers[i].canvas.context.getImageData(0, 0, width, height);
-      this.canvas.context.putImageData(imageData, x, y);
+      let image = new Image();
+      image.src = this.layers[i].element.toDataURL();
+      console.log(image.src);
+      this.canvas.context.drawImage(image, x, y);
     }
   }
-
-  displayLayers() {}
-
-  // showImageControl(context) {
-  //   let IMAGE_CONTROL = new ImageControl();
-  //   IMAGE_CONTROL.bindRotateLeft(context.rotateLeft.bind(context));
-  //   IMAGE_CONTROL.bindRotateRight(context.rotateRight.bind(context));
-  //   IMAGE_CONTROL.bindFlip(context.flip.bind(context));
-  //   // IMAGE_CONTROL.bindCrop(context.crop.bind(context));
-  // }
-
-  // showTextControl(context) {
-
-  // }
-
-  // addText() {
-  //     const text = new TextLayer();
-  //     this.layers.push(text);
-  //     text.onClick = new TextControl();
-  // }
 }
 
 export default Editor;

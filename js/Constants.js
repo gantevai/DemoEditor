@@ -3,7 +3,10 @@ const CONSTANTS = {
   FILTER_TYPE: {
     ORIGINAL: 'original',
     SEPIA: 'sepia',
-    GRAYSCALE: 'grayscale'
+    GRAYSCALE: 'grayscale',
+    SHARPEN: 'sharpen',
+    BLUR: 'blur',
+    USM: 'usm'
   },
   BRIGHTNESS: {
     SLIDER_NAME: 'Brightness',

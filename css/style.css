@@ -1,20 +1,27 @@
 .menu-bar {
   width: 100%;
   float: left;
+  box-shadow: inset 0px 0px 15px 0px #b0c8e2;
 }
 
 .menu-bar li {
+  float: left;
   list-style: none;
-  padding: 2px 4px;
-  margin: 2px auto;
-  background-color: lightgray;
-  border-radius: 50%;
 }
 
 .menu-bar li a {
   text-decoration: none;
+  padding: 6px 15px;
+  margin: 2px auto;
+  display: block;
   color: black;
-  font-weight: bold;
+  font-weight: 600;
+  font-size: 12px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.menu-bar li:hover {
+  background: #dde6f0;
 }
 
 .text-input {
@@ -26,13 +33,22 @@ li img {
   height: 20px;
 }
 
-.heading-span {
+.heading-span,
+.all-layers-heading-span {
   font-size: 14px;
   font-weight: bold;
   text-align: center;
   margin-bottom: 5px;
   float: left;
   width: 100%;
+}
+
+.all-layers-heading-span {
+  background-color: #b0c8e2;
+  padding: 5px;
+  border-bottom: 2px solid #ababab;
+  box-sizing: border-box;
+  margin-bottom: 0;
 }
 
 .manipulators {
@@ -46,10 +62,4 @@ li img {
 
 .slider-name {
   font-size: 11px;
-}
-
-.layer-info span {
-  font-size: 11px;
-  display: block;
-  text-align: center;
 }

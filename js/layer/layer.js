@@ -1,7 +1,10 @@
 import CanvasElement from '../CanvasElement.js';
 class Layer {
+  element;
   constructor(container) {
+    this.container = container;
     this.canvas = new CanvasElement(container);
+    this.element = this.canvas.element;
     this.rotationAngle = 0;
     this.isTransforming = false;
     this.degreeToRadian = Math.PI / 180;
@@ -11,10 +14,10 @@ class Layer {
     this.canvas.changeZIndex(zIndex);
   }
 
-  bindClick(clicked, index) {
-    this.canvas.element.onclick = () => {
+  bindClick(clicked) {
+    this.element.onclick = () => {
       this.canvas.showresizable();
-      clicked(index, this);
+      clicked(this);
     };
   }
 
@@ -75,6 +78,10 @@ class Layer {
       this.canvas.createImageCopy();
       this.isTransforming = false;
     }.bind(this);
+  }
+
+  removeLayer() {
+    this.element.parentElement.remove();
   }
 }
 

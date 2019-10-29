@@ -5,6 +5,7 @@ class Main {
   uploadBtn = document.getElementById('uploadBtn');
   fileInputBtn = document.getElementById('fileInputBtn');
   saveBtn = document.getElementById('saveBtn');
+  addTextBtn = document.getElementById('addTextBtn');
   constructor() {
     this.init();
   }
@@ -23,14 +24,9 @@ class Main {
       this.editor.canvas.clearCanvas();
     };
 
-    // this.saveBtn.onclick = () => {
-    //   image = canvas.toDataURL('image/png', 1.0).replace('image/png', 'image/octet-stream');
-
-    //   var link = document.createElement('a');
-    //   link.download = 'my-image.png';
-    //   link.href = image;
-    //   link.click();
-    // };
+    this.addTextBtn.onclick = () => {
+      this.addText();
+    };
   }
 
   upload(input) {
@@ -47,6 +43,10 @@ class Main {
       };
       reader.readAsDataURL(input.target.files[0]);
     }
+  }
+
+  addText() {
+    this.editor.addText();
   }
 
   save() {

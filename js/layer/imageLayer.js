@@ -4,7 +4,7 @@ import ImageControl from '../controls/imageControl.js';
 import Crop from '../Crop.js';
 
 class ImageLayer extends Layer {
-  layerCopy = [];
+  // layerCopy = [];
   constructor(container) {
     super(container);
     this.cropSection;
@@ -15,7 +15,36 @@ class ImageLayer extends Layer {
   }
 
   crop() {
-    this.cropSection = new Crop('', isCrop);
+    this.cropSection = new Crop(this.canvas.resizable, true);
+    this.cropSection.resizable.ondblclick = () => {
+      this.cropImage();
+    };
+  }
+
+  cropImage() {
+    const CROP_DIMENSION = this.cropSection.getCropDimensions(this.canvas);
+    this.cropSection.destroy();
+    this.cropSection = null;
+
+    const IMAGE = new Image();
+    IMAGE.onload = () => {
+      this.canvas.setCanvasSize(CROP_DIMENSION.width, CROP_DIMENSION.height);
+      this.canvas
+        .getContext()
+        .drawImage(
+          IMAGE,
+          CROP_DIMENSION.startX,
+          CROP_DIMENSION.startY,
+          CROP_DIMENSION.width,
+          CROP_DIMENSION.height,
+          0,
+          0,
+          CROP_DIMENSION.width,
+          CROP_DIMENSION.height
+        );
+      this.canvas.createImageCopy();
+    };
+    IMAGE.src = this.canvas.getCanvas().toDataURL();
   }
 
   filter(imageData) {
@@ -34,9 +63,5 @@ class ImageLayer extends Layer {
     const imgHeight = this.canvas.getCanvasSize().height;
     return this.canvas.context.getImageData(0, 0, imgWidth, imgHeight);
   }
-
-  // makeLayerCopy(){
-
-  // }
 }
 export default ImageLayer;

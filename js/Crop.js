@@ -4,23 +4,25 @@ class Crop extends CanvasElement {
   constructor(container, isCrop) {
     super(container, isCrop);
 
+    this.element.style.zIndex = this.element.zIndex + 1;
     this.fillColor();
+    this.showresizable();
   }
 
   fillColor() {
     this.context.fillStyle = 'Black';
     this.element.style.opacity = 0.4;
-    this.context.fillRect(0, 0, 200, 200);
+    this.context.fillRect(0, 0, 100, 100);
     this.element.classList.add('crop-section');
   }
 
-  getCropDimensions(mainImageCanvas) {
+  getCropDimensions(canvas) {
     var dimension;
     return (dimension = {
       // positionX: this.resizable.offsetLeft,
       // positionY: this.resizable.offsetTop,
-      startX: this.resizable.offsetLeft - mainImageCanvas.resizable.offsetLeft,
-      startY: this.resizable.offsetTop - mainImageCanvas.resizable.offsetTop,
+      startX: this.resizable.offsetLeft,
+      startY: this.resizable.offsetTop,
       width: this.resizable.offsetWidth,
       height: this.resizable.offsetHeight
     });

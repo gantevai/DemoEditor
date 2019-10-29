@@ -2,8 +2,6 @@ import Control from './control.js';
 import CONSTANTS from '../Constants.js';
 import Filter from '../filters/filters.js';
 class ImageControl extends Control {
-  controlWidth = 144;
-
   constructor(layer) {
     super(layer);
     this.init();
@@ -12,14 +10,15 @@ class ImageControl extends Control {
   init() {
     this.filter = new Filter(this.layer.getImageData());
     this.controlBox.id = 'image_control';
-    // this.controlBox.style.height = `${this.defaultSize.height}px`;
-    this.controlBox.style.width = `${this.controlWidth}px`;
     this.createSpecificControls();
     this.createFilterControls();
     this.createSliderBars();
   }
 
   createSpecificControls() {
+    this.createButton('flip').onclick = () => {
+      this.layer.flip();
+    };
     this.createButton('crop').onclick = () => {
       this.layer.crop();
     };
@@ -45,16 +44,16 @@ class ImageControl extends Control {
       imageData = this.filter.getFilteredImageData(CONSTANTS.FILTER_TYPE.SEPIA);
       this.layer.filter(imageData);
     };
-    this.createFilteredThumbnail(CONSTANTS.FILTER_TYPE.SEPIA).onclick = () => {
-      imageData = this.filter.getFilteredImageData(CONSTANTS.FILTER_TYPE.SEPIA);
+    this.createFilteredThumbnail(CONSTANTS.FILTER_TYPE.BLUR).onclick = () => {
+      imageData = this.filter.getFilteredImageData(CONSTANTS.FILTER_TYPE.BLUR);
       this.layer.filter(imageData);
     };
-    this.createFilteredThumbnail(CONSTANTS.FILTER_TYPE.GRAYSCALE).onclick = () => {
-      imageData = this.filter.getFilteredImageData(CONSTANTS.FILTER_TYPE.GRAYSCALE);
+    this.createFilteredThumbnail(CONSTANTS.FILTER_TYPE.SHARPEN).onclick = () => {
+      imageData = this.filter.getFilteredImageData(CONSTANTS.FILTER_TYPE.SHARPEN);
       this.layer.filter(imageData);
     };
-    this.createFilteredThumbnail(CONSTANTS.FILTER_TYPE.SEPIA).onclick = () => {
-      imageData = this.filter.getFilteredImageData(CONSTANTS.FILTER_TYPE.SEPIA);
+    this.createFilteredThumbnail(CONSTANTS.FILTER_TYPE.USM).onclick = () => {
+      imageData = this.filter.getFilteredImageData(CONSTANTS.FILTER_TYPE.USM);
       this.layer.filter(imageData);
     };
   }

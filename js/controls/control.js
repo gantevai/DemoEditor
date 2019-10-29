@@ -4,12 +4,14 @@ class Control {
   buttonArray = []; // all the buttons within the control box
   constructor(layer) {
     this.layer = layer;
+    this.remove();
     this.createElement();
     this.createCommonControls();
   }
 
   createElement() {
     this.controlBox = document.createElement('div');
+    this.controlBox.classList.add('control-box');
     document.getElementsByTagName('body')[0].appendChild(this.controlBox);
   }
 
@@ -19,9 +21,6 @@ class Control {
     };
     this.createButton('rotate-right').onclick = () => {
       this.layer.rotateRight();
-    };
-    this.createButton('flip').onclick = () => {
-      this.layer.flip();
     };
   }
 
@@ -34,10 +33,11 @@ class Control {
     return button;
   }
 
-  // makeDraggable() {}
-
-  // remove() {
-  //   this.control = null;
-  // }
+  remove() {
+    const oldControlBox = document.getElementsByClassName('control-box')[0];
+    if (oldControlBox) {
+      oldControlBox.remove();
+    }
+  }
 }
 export default Control;
