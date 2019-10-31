@@ -12,9 +12,25 @@ class ImageLayer extends Layer {
 
   fillImage(image) {
     this.canvas.handleCanvasSize(image);
+    this.original = image;
+  }
+
+  resetChanges() {
+    this.canvas.createImageCopy(this.original);
+    // this.canvas.getContext().drawImage(this.original, 0, 0,this.original.width,this.original.height);
+    this.canvas.handleCanvasSize(this.original);
+    // var canvas = document.createElement('canvas');
+    // var ctx = canvas.getContext('2d');
+    // canvas.width = this.original.width;
+    // canvas.height = this.original.height;
+    // ctx.drawImage(this.original, 0, 0);
+    // return ctx.getImageData(0, 0, canvas.width, canvas.height);
   }
 
   crop() {
+    if (this.cropSection) {
+      this.cropSection.destroy();
+    }
     this.cropSection = new Crop(this.canvas.resizable, true);
     this.cropSection.resizable.ondblclick = () => {
       this.cropImage();

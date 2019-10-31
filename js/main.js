@@ -6,12 +6,18 @@ class Main {
   fileInputBtn = document.getElementById('fileInputBtn');
   saveBtn = document.getElementById('saveBtn');
   addTextBtn = document.getElementById('addTextBtn');
+  newEditorBtn = document.getElementById('newEditor');
   constructor() {
     this.init();
   }
 
   init() {
     this.editor = new Editor('editing-container');
+    this.newEditorBtn.onclick = () => {
+      this.editor.clearEditor();
+      document.getElementById('editing-container').innerHTML = '';
+      this.editor = new Editor('editing-container');
+    };
     this.uploadBtn.onclick = () => {
       this.fileInputBtn.click();
     };
@@ -20,8 +26,12 @@ class Main {
     };
     this.saveBtn.onclick = e => {
       e.preventDefault();
-      this.save();
-      this.editor.canvas.clearCanvas();
+      if (this.editor.isEmpty()) {
+        alert('Editor is empty');
+      } else {
+        this.save();
+        this.editor.canvas.clearCanvas();
+      }
     };
 
     this.addTextBtn.onclick = () => {

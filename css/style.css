@@ -1,7 +1,7 @@
 .menu-bar {
   width: 100%;
   float: left;
-  box-shadow: inset 0px 0px 15px 0px #b0c8e2;
+  box-shadow: 0px 0px 15px #b0c8e2;
 }
 
 .menu-bar li {
@@ -11,16 +11,15 @@
 
 .menu-bar li a {
   text-decoration: none;
-  padding: 6px 15px;
-  margin: 2px auto;
+  padding: 0 5px;
+  margin: 2px;
   display: block;
   color: black;
   font-weight: 600;
   font-size: 12px;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
 
-.menu-bar li:hover {
+.menu-bar li a:hover {
   background: #dde6f0;
 }
 
@@ -29,8 +28,8 @@
 }
 
 li img {
-  width: 20px;
-  height: 20px;
+  width: 30px;
+  height: 30px;
 }
 
 .heading-span,
@@ -41,23 +40,48 @@ li img {
   margin-bottom: 5px;
   float: left;
   width: 100%;
+  background-color: #b0c8e2;
+  border-bottom: 2px solid #ababab;
+  box-sizing: border-box;
+  padding: 3.5px;
 }
 
-.all-layers-heading-span {
-  background-color: #b0c8e2;
-  padding: 5px;
+/* .all-layers-heading-span {
   border-bottom: 2px solid #ababab;
   box-sizing: border-box;
   margin-bottom: 0;
-}
+} */
 
 .manipulators {
-  border-top: 1px solid darkgray;
-  padding-top: 5px;
+  margin-top: 5px;
+  padding-bottom: 5px;
 }
 
 .sliders {
-  margin: 0 7px;
+  margin: 8px 7px;
+  width: 170px;
+  background: #111;
+  -webkit-appearance: none;
+  outline: none;
+  height: 1px;
+}
+
+.sliders::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  border-radius: 50%;
+  height: 15px;
+  width: 15px;
+  background: #b0c8e2;
+  cursor: pointer;
+}
+
+.sliders::-moz-range-thumb {
+  border-radius: 50%;
+  height: 15px;
+  width: 15px;
+  background: #b0c8e2;
+  cursor: pointer;
 }
 
 .slider-name {

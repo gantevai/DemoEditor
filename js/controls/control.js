@@ -26,6 +26,7 @@ class Control {
 
   createButton(name) {
     const button = document.createElement('button');
+    button.setAttribute('title', name);
     const icon = new Image();
     icon.src = `images/${name}.png`;
     button.append(icon);

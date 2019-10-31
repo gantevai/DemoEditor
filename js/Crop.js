@@ -12,7 +12,7 @@ class Crop extends CanvasElement {
   fillColor() {
     this.context.fillStyle = 'Black';
     this.element.style.opacity = 0.4;
-    this.context.fillRect(0, 0, 100, 100);
+    this.context.fillRect(0, 0, this.resizable.offsetWidth, this.resizable.offsetHeight);
     this.element.classList.add('crop-section');
   }
 

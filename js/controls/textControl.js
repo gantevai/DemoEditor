@@ -1,8 +1,11 @@
 import Control from './control.js';
 
 class TextControl extends Control {
-  constructor(layer, fontStyle) {
+  constructor(layer, fontStyle, allLayers, layerContainer) {
     super(layer);
+    this.layerContainer = layerContainer;
+    this.allLayers = allLayers;
+    this.index = this.allLayers.indexOf(layer);
     this.init(fontStyle);
   }
 
@@ -62,12 +65,14 @@ class TextControl extends Control {
   createFontControls() {
     this.textField = document.createElement('input');
     this.textField.setAttribute('type', 'text');
+    this.textField.setAttribute('title', 'Add Text');
     this.textField.classList.add('text-field');
     this.textField.setAttribute('placeholder', 'Add Text');
     this.controlBox.appendChild(this.textField);
 
     this.selectFontFamily = document.createElement('select');
     this.selectFontFamily.classList.add('font-family-selector');
+    this.selectFontFamily.setAttribute('title', 'Font Family');
     this.controlBox.appendChild(this.selectFontFamily);
     this.createOptions(this.selectFontFamily, 'Arial');
     this.createOptions(this.selectFontFamily, 'Impact');
@@ -75,6 +80,7 @@ class TextControl extends Control {
     this.createOptions(this.selectFontFamily, 'Times New Roman');
 
     this.selectFontSize = document.createElement('select');
+    this.selectFontSize.setAttribute('title', 'Font Size');
     this.selectFontSize.classList.add('font-size-selector');
     this.controlBox.appendChild(this.selectFontSize);
     this.createOptions(this.selectFontSize, '10px');
@@ -91,6 +97,8 @@ class TextControl extends Control {
     this.createOptions(this.selectFontSize, '32px');
 
     this.colorBox = document.createElement('input');
+    this.colorBox.setAttribute('title', 'Font Color');
+    this.colorBox.style.height = '18px';
     this.colorBox.setAttribute('type', 'color');
     this.colorBox.classList.add('color-box');
     this.controlBox.appendChild(this.colorBox);
@@ -133,6 +141,8 @@ class TextControl extends Control {
     this.layer.clearText();
     // puts the updated text in the canvas
     this.layer.putText();
+    this.layerContainer.displayLayers(this.allLayers);
+    this.layerContainer.setActive(this.index);
   }
 
   createOptions(selectContainer, text) {

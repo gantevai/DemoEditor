@@ -6,6 +6,13 @@ class LayerContainer {
     this.container = document.getElementById('layerBody');
   }
 
+  setActive(index) {
+    for (const layerOperator of this.layerOperators) {
+      layerOperator.layerDiv.classList.remove('active');
+    }
+    this.layerOperators[index].layerDiv.classList.add('active');
+  }
+
   displayLayers(layers) {
     this.container.innerHTML = '';
     this.layerOperators = [];
@@ -13,10 +20,12 @@ class LayerContainer {
     for (let i = 0; i < layers.length; i++) {
       this.layerOperators.push(this.createLayerDiv(layers[i], i));
       if (i == 0) {
-        this.layerOperators[i].up.style.visibility = 'hidden';
+        let upImage = this.layerOperators[i].up.childNodes[0];
+        upImage.src = '../images/up-arrow-disabled.png';
       }
       if (i == this.layers.length - 1) {
-        this.layerOperators[i].down.style.visibility = 'hidden';
+        let downImage = this.layerOperators[i].down.childNodes[0];
+        downImage.src = '../images/down-arrow-disabled.png';
       }
     }
 
@@ -29,12 +38,14 @@ class LayerContainer {
         if (i != 0) {
           this.swapArrayElements(this.layers, i, i - 1);
           this.displayLayers(this.layers);
+          this.setActive(i - 1);
         }
       };
       this.layerOperators[i].down.onclick = () => {
         if (i < this.layers.length - 1) {
           this.swapArrayElements(this.layers, i, i + 1);
           this.displayLayers(this.layers);
+          this.setActive(i + 1);
         }
       };
       this.layerOperators[i].del.onclick = () => {
@@ -57,7 +68,7 @@ class LayerContainer {
 
   createLayerDiv(layer, i) {
     const operator = {};
-    let layerDiv = this.docCreateElement('div', 'layer');
+    let layerDiv = (operator.layerDiv = this.docCreateElement('div', 'layer'));
     let upDownBtnsDiv = this.docCreateElement('div', 'up-down-btns');
     let upBtn = (operator.up = this.docCreateElement('button', 'up-btn'));
     let downBtn = (operator.down = this.docCreateElement('button', 'down-btn'));

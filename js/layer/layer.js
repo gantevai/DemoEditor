@@ -1,6 +1,7 @@
 import CanvasElement from '../CanvasElement.js';
 class Layer {
   element;
+  original;
   constructor(container) {
     this.container = container;
     this.canvas = new CanvasElement(container);

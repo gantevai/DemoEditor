@@ -37,9 +37,7 @@ class Editor {
   }
 
   /**
-   * @summary : this function gets called when a layer canvas is clicked.
-   * @param {*} index: index of the layer clicked; used to change z index; hide resizable of other layers;
-   * to identify the layer clicked is either text or image
+   * @summary : this function gets called when a layer's canvas is clicked.
    * @param {*} layerContext : the context of the clicked layer (i.e. image layer or text layer)
    * @memberof Editor
    */
@@ -55,8 +53,14 @@ class Editor {
     if (layerContext instanceof ImageLayer) {
       this.control = new ImageControl(layerContext);
     } else {
-      this.control = new TextControl(layerContext, layerContext.fontStyle);
+      this.control = new TextControl(
+        layerContext,
+        layerContext.fontStyle,
+        this.layers,
+        this.layerContainer
+      );
     }
+    this.layerContainer.setActive(index);
   }
 
   drawAllLayers() {
@@ -68,9 +72,19 @@ class Editor {
       let height = dimensions.height;
       let image = new Image();
       image.src = this.layers[i].element.toDataURL();
-      console.log(image.src);
       this.canvas.context.drawImage(image, x, y);
     }
+  }
+
+  isEmpty() {
+    if (this.layers.length == 0) return true;
+    else return false;
+  }
+
+  clearEditor() {
+    this.layers = [];
+    this.layerContainer.displayLayers(this.layers);
+    this.control.remove();
   }
 }
 

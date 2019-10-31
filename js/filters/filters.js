@@ -61,49 +61,26 @@ class Filter {
           var inputRed = data[i];
           var inputGreen = data[i + 1];
           var inputBlue = data[i + 2];
-          data[i] = Math.min(255, 0.299 * inputRed + 0.587 * inputGreen + 0.114 * inputBlue);
-          data[i + 1] = Math.min(255, 0.299 * inputRed + 0.587 * inputGreen + 0.114 * inputBlue);
-          data[i + 2] = Math.min(255, 0.299 * inputRed + 0.587 * inputGreen + 0.114 * inputBlue);
+          // data[i] = Math.min(255, 0.299 * inputRed + 0.587 * inputGreen + 0.114 * inputBlue);
+          // data[i + 1] = Math.min(255, 0.299 * inputRed + 0.587 * inputGreen + 0.114 * inputBlue);
+          // data[i + 2] = Math.min(255, 0.299 * inputRed + 0.587 * inputGreen + 0.114 * inputBlue);
+
+          data[i] = Math.min(255, 0.2126 * inputRed + 0.7152 * inputGreen + 0.0722 * inputBlue);
+          data[i + 1] = Math.min(255, 0.2126 * inputRed + 0.7152 * inputGreen + 0.0722 * inputBlue);
+          data[i + 2] = Math.min(255, 0.2126 * inputRed + 0.7152 * inputGreen + 0.0722 * inputBlue);
         }
         break;
-      case CONSTANTS.FILTER_TYPE.BLUR:
-        weights = [1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9, 1 / 9];
-        image = this.convolute(image, image.width, image.height, weights, true);
+
+      case CONSTANTS.FILTER_TYPE.MOON:
+        image = this.getMoonFilter(image);
         break;
-      case CONSTANTS.FILTER_TYPE.SHARPEN:
-        weights = [0, -1, 0, -1, 5, -1, 0, -1, 0];
-        image = this.convolute(image, image.width, image.height, weights, true);
+      case CONSTANTS.FILTER_TYPE.CLAREDON:
+        image = this.getClaredonFilter(image);
         break;
-      case CONSTANTS.FILTER_TYPE.USM:
-        weights = [
-          -1 / 256,
-          -2 / 256,
-          -6 / 256,
-          -4 / 256,
-          -1 / 256,
-          -4 / 256,
-          -16 / 256,
-          -24 / 256,
-          -16 / 256,
-          -4 / 256,
-          -6 / 256,
-          -24 / 256,
-          476 / 256,
-          -24 / 256,
-          -6 / 256,
-          -4 / 256,
-          -16 / 256,
-          -24 / 256,
-          -16 / 256,
-          -4 / 256,
-          -1 / 256,
-          -4 / 256,
-          -6 / 256,
-          -4 / 256,
-          -1 / 256
-        ];
-        image = this.convolute(image, image.width, image.height, weights, true);
+      case CONSTANTS.FILTER_TYPE.LARK:
+        image = this.getLarkFilter(image);
         break;
+
       default:
         break;
     }
@@ -117,35 +94,29 @@ class Filter {
   }
 
   manipulate(image, sliderValue, sliderName) {
-    var data = image.data;
-    for (var i = 0; i < data.length; i += 4) {
-      var inputRed = data[i];
-      var inputGreen = data[i + 1];
-      var inputBlue = data[i + 2];
-      var factor;
-      switch (sliderName) {
-        case CONSTANTS.BRIGHTNESS.SLIDER_NAME:
-          factor = CONSTANTS.BRIGHTNESS.FACTOR;
-          data[i] = Math.min(255, sliderValue * factor + inputRed);
-          data[i + 1] = Math.min(255, sliderValue * factor + inputGreen);
-          data[i + 2] = Math.min(255, sliderValue * factor + inputBlue);
-          break;
-        case CONSTANTS.CONTRAST.SLIDER_NAME:
-          let contrast = sliderValue * CONSTANTS.CONTRAST.FACTOR * 2.55;
-          factor = (contrast + 255) / (255.01 - contrast);
-          let midValue = 128;
-
-          data[i] = factor * (data[i] - midValue) + midValue;
-          data[i + 1] = factor * (data[i + 1] - midValue) + midValue;
-          data[i + 2] = factor * (data[i + 2] - midValue) + midValue;
-          break;
-        case CONSTANTS.SATURATION.SLIDER_NAME:
-          data[i] = data[i + 1] = data[i + 2] = (inputBlue + inputGreen + inputRed) / 3;
-          break;
-        default:
-          break;
-      }
+    switch (sliderName) {
+      case CONSTANTS.BRIGHTNESS.SLIDER_NAME:
+        image = this.getBrightness(sliderValue, image);
+        break;
+      case CONSTANTS.CONTRAST.SLIDER_NAME:
+        image = this.getContrast(sliderValue, image);
+        break;
+      case CONSTANTS.SATURATION.SLIDER_NAME:
+        image = this.getSaturation(sliderValue, image);
+        break;
+      case CONSTANTS.GAMMA.SLIDER_NAME:
+        image = this.getGamma(sliderValue, image);
+        break;
+      case CONSTANTS.TEMPERATURE.SLIDER_NAME:
+        image = this.getTemperature(sliderValue, image);
+        break;
+      case CONSTANTS.VIBRANCE.SLIDER_NAME:
+        image = this.getVibrance(sliderValue, image);
+        break;
+      default:
+        break;
     }
+
     return image;
   }
 
@@ -215,6 +186,118 @@ class Filter {
       }
     }
     return imageData;
+  }
+
+  getBrightness(sliderValue, image) {
+    let data = image.data;
+    let factor = CONSTANTS.BRIGHTNESS.FACTOR * sliderValue;
+    for (let i = 0; i < data.length; i += 4) {
+      let inputRed = data[i];
+      let inputGreen = data[i + 1];
+      let inputBlue = data[i + 2];
+
+      data[i] = Math.min(255, factor + inputRed);
+      data[i + 1] = Math.min(255, factor + inputGreen);
+      data[i + 2] = Math.min(255, factor + inputBlue);
+    }
+    return image;
+  }
+
+  getContrast(sliderValue, image) {
+    let data = image.data;
+    let contrast = sliderValue * CONSTANTS.CONTRAST.FACTOR * 2.55;
+    let factor = (contrast + 255) / (255.01 - contrast);
+    let midValue = 128;
+    for (let i = 0; i < data.length; i += 4) {
+      data[i] = factor * (data[i] - midValue) + midValue;
+      data[i + 1] = factor * (data[i + 1] - midValue) + midValue;
+      data[i + 2] = factor * (data[i + 2] - midValue) + midValue;
+    }
+    return image;
+  }
+
+  getSaturation(sliderValue, image) {
+    let data = image.data;
+    let RW = 0.299;
+    let RG = 0.587;
+    let RB = 0.114;
+    let sBar = parseFloat(1 - sliderValue);
+    let a = sBar * RW + sliderValue;
+    let b = sBar * RW;
+    let c = sBar * RW;
+    let d = sBar * RG;
+    let e = sBar * RG + sliderValue;
+    let f = sBar * RG;
+    let g = sBar * RB;
+    let h = sBar * RB;
+    let itemp = sBar * RB + sliderValue;
+    for (var i = 0; i < data.length; i += 4) {
+      let inputRed = data[i];
+      let inputGreen = data[i + 1];
+      let inputBlue = data[i + 2];
+      data[i] = a * inputRed + d * inputGreen + g * inputBlue;
+      data[i + 1] = b * inputRed + e * inputGreen + h * inputBlue;
+      data[i + 2] = c * inputRed + f * inputGreen + itemp * inputBlue;
+    }
+    return image;
+  }
+
+  getGamma(sliderValue, image) {
+    let correctionFactor = Math.round((100 / sliderValue) * 10) / 10;
+    let data = image.data;
+    for (let i = 0; i < data.length; i += 4) {
+      data[i] = 255 * Math.pow(data[i] / 255, correctionFactor);
+      data[i + 1] = 255 * Math.pow(data[i + 1] / 255, correctionFactor);
+      data[i + 2] = 255 * Math.pow(data[i + 2] / 255, correctionFactor);
+    }
+    return image;
+  }
+
+  getTemperature(sliderValue, image) {
+    let factor = CONSTANTS.TEMPERATURE.FACTOR * sliderValue;
+    let data = image.data;
+    for (let i = 0; i < data.length; i += 4) {
+      data[i] = data[i] + factor;
+      data[i + 2] = data[i + 2] - factor;
+
+      if (data[i] > 255) data[i] = 255;
+      if (data[i + 2] > 255) data[i + 2] = 255;
+      if (data[i] < 0) data[i] = 0;
+      if (data[i + 2] < 0) data[i + 2] = 0;
+    }
+    return image;
+  }
+
+  getVibrance(sliderValue, image) {
+    let data = image.data;
+    let factor = CONSTANTS.VIBRANCE.FACTOR * sliderValue;
+    for (let i = 0; i < data.length; i += 4) {
+      let inputRed = data[i];
+      let inputGreen = data[i + 1];
+      let inputBlue = data[i + 2];
+      let max = Math.max(inputRed, inputGreen, inputBlue);
+      let avg = (inputRed + inputGreen + inputBlue) / 3;
+      let amt = (((Math.abs(max - avg) * 2) / 255) * factor) / 100;
+      if (inputRed < max) data[i] = inputRed + (max - data[i]) * amt;
+      if (inputGreen < max) data[i + 1] = inputGreen + (max - data[i + 1]) * amt;
+      if (inputBlue < max) data[i + 2] = inputBlue + (max - data[i + 2]) * amt;
+    }
+    return image;
+  }
+
+  getMoonFilter(image) {
+    return this.getSaturation(0, this.getBrightness(33.5, image));
+  }
+
+  getClaredonFilter(image) {
+    return this.getSaturation(1.25, this.getContrast(14, this.getBrightness(18.5, image)));
+  }
+
+  getLarkFilter(image) {
+    return this.getGamma(
+      0.57,
+      this.getSaturation(1.34, this.getContrast(17, this.getBrightness(45, image)))
+    );
   }
 }
 

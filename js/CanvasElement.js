@@ -6,9 +6,6 @@ class CanvasElement {
     this.isCrop = isCrop;
     this.init();
     this.createElement(isCrop);
-    // this.element.addEventListener('click', () => {
-    //   this.showresizable();
-    // });
     this.makeDraggable();
     this.makeResizable();
     this.createImageCopy();
@@ -81,7 +78,7 @@ class CanvasElement {
     if (!isCrop) {
       this.setCanvasSize();
     } else {
-      this.setCanvasSize(100, 100);
+      this.setCanvasSize(this.container.offsetWidth / 3, this.container.offsetHeight / 3);
     }
     this.resizable.appendChild(this.element);
     this.context = this.element.getContext('2d');
@@ -120,6 +117,7 @@ class CanvasElement {
   }
 
   showresizable() {
+    this.resizers.style.display = 'block';
     this.resizerTopLeft.style.display = 'block';
     this.resizerTopRight.style.display = 'block';
     this.resizerBottomLeft.style.display = 'block';
@@ -127,6 +125,7 @@ class CanvasElement {
   }
 
   hideresizable() {
+    this.resizers.style.display = 'none';
     this.resizerTopLeft.style.display = 'none';
     this.resizerTopRight.style.display = 'none';
     this.resizerBottomLeft.style.display = 'none';
@@ -139,6 +138,10 @@ class CanvasElement {
     var imgAspectRatio = imgWidth / imgHeight;
     this.element.height = this.element.offsetHeight;
     this.element.width = this.element.offsetHeight * imgAspectRatio;
+    this.originalData = {
+      height: this.element.height,
+      width: this.element.width
+    };
     this.setCanvasSize(this.element.width, this.element.height);
     this.context.drawImage(image, 0, 0, this.element.width, this.element.height);
   }
@@ -181,6 +184,7 @@ class CanvasElement {
           newBoxPositionY + this.element.offsetHeight <=
             this.container.offsetTop + this.container.offsetHeight
         ) {
+          console.log(newBoxPositionY);
           this.resizable.style.top = newBoxPositionY - this.container.offsetTop + 'px';
           this.element.style.top = 0;
         }
@@ -222,7 +226,6 @@ class CanvasElement {
     var resizeBind, stopResizeBind;
     const imageState = this.imageState[0];
 
-    this.createImageCopy();
     for (var i = 0; i < this.resizerArray.length; i++) {
       const currentResizer = this.resizerArray[i];
       currentResizer.addEventListener('mousedown', e => {
@@ -356,10 +359,20 @@ class CanvasElement {
     );
   }
 
-  createImageCopy() {
-    this.oldImage = new Image();
-    this.oldImage.src = this.element.toDataURL();
+  createImageCopy(originalImage) {
+    if (originalImage) {
+      this.oldImage = originalImage;
+      this.setCanvasSize(this.originalData.width, this.originalData.height);
+    } else {
+      this.oldImage = new Image();
+      this.oldImage.src = this.element.toDataURL();
+    }
   }
+
+  // changeSourceImageCopied() {
+  //   if (this.sourceImageCopied) this.sourceImageCopied = false;
+  //   else this.sourceImageCopied = true;
+  // }
 
   destroy() {
     this.resizable.remove();
